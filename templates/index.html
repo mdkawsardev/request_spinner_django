@@ -6,6 +6,49 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Welcome</h1>
+    <form id="myForm" method="post" action="{% url 'your_view_name' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!-- তোমার ফর্ম ফিল্ড গুলো -->
+    <button type="submit" id="submitBtn">Submit</button>
+</form>
+
+<div id="loading" style="display: none;">Loading...</div>
+<div id="successMessage" style="display: none;">Form submitted successfully!</div>
+<div id="errorMessage" style="display: none; color: red;">Submission failed. Please try again.</div>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // ফর্ম সাবমিট ডিফল্ট বন্ধ করো
+        document.getElementById('loading').style.display = 'block'; // লোডিং দেখাও
+        document.getElementById('submitBtn').disabled = true; // বাটন ডিসেবল করো
+
+        // ফর্ম ডেটা AJAX দিয়ে পাঠাও
+        fetch("{% url 'your_view_name' %}", {
+            method: 'POST',
+            body: new FormData(this),
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+                this.reset(); // ফর্ম রিসেট করো
+            } else {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('submitBtn').disabled = false;
+        });
+    });
+</script>
 </body>
 </html>
