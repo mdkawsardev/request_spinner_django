@@ -1,8 +1,9 @@
 .loader {
     position:absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .lds-facebook,
 .lds-facebook div {
@@ -44,12 +45,8 @@
     height: 32px;
   }
 }
-.success {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+
+.success-animation { margin:150px auto;}
 
 .checkmark {
     width: 100px;
